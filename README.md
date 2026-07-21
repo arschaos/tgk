@@ -9,10 +9,10 @@
 
 ---
 
-[![CI](https://github.com/arschaos/tgk/actions/workflows/rust.yml/badge.svg)](https://github.com/arschas/tgk/actions)
+[![CI](https://github.com/arschaos/tgk/actions/workflows/rust.yml/badge.svg)](https://github.com/arschaos/tgk/actions)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg?style=flat-square)](LICENSE)
 [![Rust](https://img.shields.io/badge/Rust-1.85%2B-orange?style=flat-square&logo=rust)](https://www.rust-lang.org/)
-[![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20macOS%20%7C%20Windows-blue?style=flat-square)](#)
+![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20macOS%20%7C%20Windows-blue?style=flat-square)
 
 </div>
 
