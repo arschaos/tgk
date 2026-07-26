@@ -1,7 +1,17 @@
+//! Implementation of the `tgk init` subcommand.
+//!
+//! Guides the user through an interactive terminal workflow to collect personal details
+//! needed for data broker removal requests and builds a [`UserProfile`].
+
 use tgk_core::{Address, FullName, UserProfile};
 
 use crate::prompt::{confirm, prompt, prompt_list, prompt_optional};
 
+/// Executes the profile initialization wizard.
+///
+/// Interactively prompts the user for identity attributes (name, aliases, DOB, emails,
+/// phone numbers, current address, previous addresses, and relatives) and constructs
+/// a [`UserProfile`].
 pub fn run() {
     println!("Initializing User Profile...");
     println!(
@@ -49,6 +59,7 @@ pub fn run() {
     println!("\nProfile captured:\n{profile:#?}");
 }
 
+/// Prompts the user for all constituent fields of an [`Address`].
 fn prompt_address() -> Address {
     Address {
         street: prompt("\tStreet"),
@@ -58,4 +69,5 @@ fn prompt_address() -> Address {
         country: prompt("\tCountry"),
     }
 }
+
 

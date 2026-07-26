@@ -1,9 +1,12 @@
+//! Terminal prompt utilities for interactive input collection.
+
 use std::io::{self, Write};
 
 /// Prompts for a single line of input and returns it trimmed. This is the
 /// CLI's own concern — it's what stands in for a form field until the GUI
 /// exists, so it stays out of tgk-core.
 pub fn prompt(label: &str) -> String {
+
     print!("{label}: ");
     io::stdout().flush().ok();
 
