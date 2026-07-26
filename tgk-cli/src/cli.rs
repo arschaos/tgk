@@ -14,7 +14,6 @@ pub struct Cli {
 /// Available subcommands for TGK.
 #[derive(Subcommand, Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Commands {
-
     /// Set up your local and encrypted TGK profile.
     ///
     /// Prompts for identity details (such as full name, address history,
