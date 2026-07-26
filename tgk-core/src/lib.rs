@@ -13,8 +13,8 @@ use serde::{Deserialize, Serialize};
 /// later). Nothing in here should assume it was collected via a terminal —
 /// treat it as plain data, built however the caller likes.
 ///
-/// Field choices are based on what data removal services (DeleteMe, Incogni,
-/// Aura, etc.) match against, since that's the same information the broker
+/// Field choices are based on what data removal services (`DeleteMe`, `Incogni`,
+/// `Aura`, etc.) match against, since that's the same information the broker
 /// sites TGK targets index on: name, address history, phone, email, plus
 /// aliases and relatives to help disambiguate people with common names.
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
