@@ -1,5 +1,8 @@
 [workspace]
 resolver = "3"
+default-members = [
+    "tgk-cli"
+]
 members = [
     "tgk-cli",
     "tgk-core",
@@ -13,3 +16,4 @@ edition = "2024"
 license = "GPL-3.0-only"
 
 [workspace.dependencies]
+clap = { version = "4.6.4", features = ["derive"] }
