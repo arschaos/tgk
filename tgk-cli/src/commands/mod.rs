@@ -10,4 +10,3 @@ pub fn dispatch(command: Commands) {
         Commands::Init => init::run(),
     }
 }
-

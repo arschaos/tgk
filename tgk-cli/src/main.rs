@@ -12,4 +12,3 @@ fn main() {
     let cli = Cli::parse();
     commands::dispatch(cli.command);
 }
-

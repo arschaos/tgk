@@ -6,23 +6,20 @@ use std::io::{self, Write};
 /// CLI's own concern — it's what stands in for a form field until the GUI
 /// exists, so it stays out of tgk-core.
 pub fn prompt(label: &str) -> String {
-
     print!("{label}: ");
     io::stdout().flush().ok();
 
     let mut input = String::new();
-    io::stdin().read_line(&mut input).expect("failed to read input");
+    io::stdin()
+        .read_line(&mut input)
+        .expect("failed to read input");
     input.trim().to_string()
 }
 
 /// Like `prompt`, but treats empty input as "the user skipped this field".
 pub fn prompt_optional(label: &str) -> Option<String> {
     let value = prompt(&format!("{label} (opt)"));
-    if value.is_empty() { 
-        None 
-    } else { 
-        Some(value) 
-    }
+    if value.is_empty() { None } else { Some(value) }
 }
 
 /// Repeatedly prompts for a value (e.g. one email at a time) until the user

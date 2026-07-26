@@ -69,5 +69,3 @@ fn prompt_address() -> Address {
         country: prompt("\tCountry"),
     }
 }
-
-
