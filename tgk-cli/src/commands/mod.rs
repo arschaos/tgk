@@ -2,6 +2,7 @@
 
 pub mod init;
 pub mod scan;
+pub mod status;
 
 use crate::cli::Commands;
 
@@ -10,5 +11,6 @@ pub fn dispatch(command: Commands) {
     match command {
         Commands::Init => init::run(),
         Commands::Scan(args) => scan::run(&args),
+        Commands::Status => status::run(),
     }
 }

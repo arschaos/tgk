@@ -26,6 +26,9 @@ pub enum Commands {
     /// Will scan based on specified severity amount, a specific data broker,
     /// amount, and verbosity.
     Scan(ScanArgs),
+
+    /// Checks the status of current or past audit scans and opt-out removal requests.
+    Status,
 }
 
 /// Arguments for the `scan` subcommand.
@@ -92,5 +95,11 @@ mod tests {
                 verbosity: Some(2),
             })
         );
+    }
+
+    #[test]
+    fn test_status_cmd() {
+        let cli = Cli::try_parse_from(["tgk", "status"]).expect("Failed to parse status command");
+        assert_eq!(cli.command, Commands::Status);
     }
 }
