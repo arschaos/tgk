@@ -78,6 +78,12 @@ mod tests {
     use super::*;
 
     #[test]
+    fn test_init_cmd() {
+        let cli = Cli::try_parse_from(["tgk", "init"]).expect("Failed to parse init command");
+        assert_eq!(cli.command, Commands::Init);
+    }
+
+    #[test]
     fn test_scan_cmd_defaults() {
         let cli =
             Cli::try_parse_from(["tgk", "scan"]).expect("Failed to parse default scan command");
@@ -161,5 +167,11 @@ mod tests {
                 verbosity: Some(1),
             })
         );
+    }
+
+    #[test]
+    fn test_invalid_cmd() {
+        let result = Cli::try_parse_from(["tgk", "nonexistent"]);
+        assert!(result.is_err());
     }
 }
