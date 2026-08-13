@@ -84,7 +84,10 @@ mod tests {
     #[test]
     fn test_prompt_optional_from_reader() {
         let mut input_some = Cursor::new("data\n");
-        assert_eq!(prompt_optional_from_reader(&mut input_some, "Test"), Some("data".to_string()));
+        assert_eq!(
+            prompt_optional_from_reader(&mut input_some, "Test"),
+            Some("data".to_string())
+        );
 
         let mut input_none = Cursor::new("\n");
         assert_eq!(prompt_optional_from_reader(&mut input_none, "Test"), None);

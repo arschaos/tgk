@@ -57,23 +57,13 @@ mod tests {
     fn test_scan_cmd_defaults() {
         let cli =
             Cli::try_parse_from(["tgk", "scan"]).expect("Failed to parse default scan command");
-        assert_eq!(
-            cli.command,
-            Commands::Scan(ScanArgs {
-                severity: None,
-            })
-        );
+        assert_eq!(cli.command, Commands::Scan(ScanArgs { severity: None }));
     }
 
     #[test]
     fn test_scan_cmd_with_args() {
-        let cli = Cli::try_parse_from([
-            "tgk",
-            "scan",
-            "--severity",
-            "high",
-        ])
-        .expect("Failed to parse scan command with flags");
+        let cli = Cli::try_parse_from(["tgk", "scan", "--severity", "high"])
+            .expect("Failed to parse scan command with flags");
 
         assert_eq!(
             cli.command,
@@ -93,23 +83,13 @@ mod tests {
     fn test_purge_cmd_defaults() {
         let cli =
             Cli::try_parse_from(["tgk", "purge"]).expect("Failed to parse default purge command");
-        assert_eq!(
-            cli.command,
-            Commands::Purge(PurgeArgs {
-                severity: None,
-            })
-        );
+        assert_eq!(cli.command, Commands::Purge(PurgeArgs { severity: None }));
     }
 
     #[test]
     fn test_purge_cmd_with_args() {
-        let cli = Cli::try_parse_from([
-            "tgk",
-            "purge",
-            "--severity",
-            "critical",
-        ])
-        .expect("Failed to parse purge command with flags");
+        let cli = Cli::try_parse_from(["tgk", "purge", "--severity", "critical"])
+            .expect("Failed to parse purge command with flags");
 
         assert_eq!(
             cli.command,
