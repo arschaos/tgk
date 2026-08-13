@@ -29,6 +29,12 @@ pub enum Commands {
 
     /// Checks the status of current or past audit scans and opt-out removal requests.
     Status,
+
+    /// Triggers automated opt-out requests to purge personal data from data brokers.
+    ///
+    /// Dispatches removal requests filtered by specified severity level, data broker,
+    /// and verbosity.
+    Purge(PurgeArgs),
 }
 
 /// Arguments for the `scan` subcommand.
@@ -47,6 +53,22 @@ pub struct ScanArgs {
     pub amount: Option<usize>,
 
     /// Verbosity level for detailed scan output.
+    #[arg(short, long)]
+    pub verbosity: Option<u8>,
+}
+
+/// Arguments for the `purge` subcommand.
+#[derive(Args, Debug, Clone, PartialEq, Eq)]
+pub struct PurgeArgs {
+    /// Minimum severity level of data exposure to target for purge (e.g. low, medium, high, critical).
+    #[arg(short, long)]
+    pub severity: Option<String>,
+
+    /// Specific data broker to target for data removal.
+    #[arg(short, long)]
+    pub broker: Option<String>,
+
+    /// Verbosity level for detailed purge output.
     #[arg(short, long)]
     pub verbosity: Option<u8>,
 }
@@ -101,5 +123,43 @@ mod tests {
     fn test_status_cmd() {
         let cli = Cli::try_parse_from(["tgk", "status"]).expect("Failed to parse status command");
         assert_eq!(cli.command, Commands::Status);
+    }
+
+    #[test]
+    fn test_purge_cmd_defaults() {
+        let cli =
+            Cli::try_parse_from(["tgk", "purge"]).expect("Failed to parse default purge command");
+        assert_eq!(
+            cli.command,
+            Commands::Purge(PurgeArgs {
+                severity: None,
+                broker: None,
+                verbosity: None,
+            })
+        );
+    }
+
+    #[test]
+    fn test_purge_cmd_with_args() {
+        let cli = Cli::try_parse_from([
+            "tgk",
+            "purge",
+            "--severity",
+            "critical",
+            "--broker",
+            "spokeo",
+            "--verbosity",
+            "1",
+        ])
+        .expect("Failed to parse purge command with flags");
+
+        assert_eq!(
+            cli.command,
+            Commands::Purge(PurgeArgs {
+                severity: Some("critical".to_string()),
+                broker: Some("spokeo".to_string()),
+                verbosity: Some(1),
+            })
+        );
     }
 }
