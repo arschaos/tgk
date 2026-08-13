@@ -19,9 +19,6 @@ mod tests {
     fn test_scan_run() {
         let args = ScanArgs {
             severity: Some("high".to_string()),
-            broker: None,
-            amount: None,
-            verbosity: None,
         };
         // Verify execution completes cleanly without panicking
         run(&args);
