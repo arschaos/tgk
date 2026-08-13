@@ -1,6 +1,6 @@
 //! Command-line interface definition and argument parsing for TGK.
 
-use clap::{Parser, Subcommand};
+use clap::{Args, Parser, Subcommand};
 
 /// TGK (The Privacy Toolkit) - Personal data discovery and broker removal utility.
 #[derive(Parser)]
@@ -12,7 +12,7 @@ pub struct Cli {
 }
 
 /// Available subcommands for TGK.
-#[derive(Subcommand, Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Subcommand, Debug, Clone, PartialEq, Eq)]
 pub enum Commands {
     /// Set up your local and encrypted TGK profile.
     ///
@@ -20,4 +20,77 @@ pub enum Commands {
     /// email addresses, phone numbers, and relatives) required to locate
     /// and request removal of personal data across data brokers.
     Init,
+
+    /// Scans for public PII data based on TGK profile.
+    ///
+    /// Will scan based on specified severity amount, a specific data broker,
+    /// amount, and verbosity.
+    Scan(ScanArgs),
+}
+
+/// Arguments for the `scan` subcommand.
+#[derive(Args, Debug, Clone, PartialEq, Eq)]
+pub struct ScanArgs {
+    /// Minimum severity level of data exposure to report (e.g. low, medium, high, critical).
+    #[arg(short, long)]
+    pub severity: Option<String>,
+
+    /// Specific data broker to target for scanning.
+    #[arg(short, long)]
+    pub broker: Option<String>,
+
+    /// Maximum amount or number of data sources/records to scan.
+    #[arg(short, long)]
+    pub amount: Option<usize>,
+
+    /// Verbosity level for detailed scan output.
+    #[arg(short, long)]
+    pub verbosity: Option<u8>,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_scan_cmd_defaults() {
+        let cli =
+            Cli::try_parse_from(["tgk", "scan"]).expect("Failed to parse default scan command");
+        assert_eq!(
+            cli.command,
+            Commands::Scan(ScanArgs {
+                severity: None,
+                broker: None,
+                amount: None,
+                verbosity: None,
+            })
+        );
+    }
+
+    #[test]
+    fn test_scan_cmd_with_args() {
+        let cli = Cli::try_parse_from([
+            "tgk",
+            "scan",
+            "--severity",
+            "high",
+            "--broker",
+            "whitepages",
+            "--amount",
+            "5",
+            "--verbosity",
+            "2",
+        ])
+        .expect("Failed to parse scan command with flags");
+
+        assert_eq!(
+            cli.command,
+            Commands::Scan(ScanArgs {
+                severity: Some("high".to_string()),
+                broker: Some("whitepages".to_string()),
+                amount: Some(5),
+                verbosity: Some(2),
+            })
+        );
+    }
 }
