@@ -1,6 +1,7 @@
 //! Command handlers and dispatch logic for TGK CLI subcommands.
 
 pub mod init;
+pub mod scan;
 
 use crate::cli::Commands;
 
@@ -8,5 +9,6 @@ use crate::cli::Commands;
 pub fn dispatch(command: Commands) {
     match command {
         Commands::Init => init::run(),
+        Commands::Scan(args) => scan::run(&args),
     }
 }
