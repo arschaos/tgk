@@ -19,8 +19,6 @@ mod tests {
     fn test_purge_run() {
         let args = PurgeArgs {
             severity: Some("high".to_string()),
-            broker: None,
-            verbosity: None,
         };
         // Verify execution completes cleanly without panicking
         run(&args);

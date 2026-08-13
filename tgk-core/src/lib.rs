@@ -79,3 +79,49 @@ pub struct Address {
     /// Country name or two-letter ISO country code.
     pub country: String,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_user_profile_default() {
+        let profile = UserProfile::default();
+        assert!(profile.full_name.first.is_empty());
+        assert!(profile.aliases.is_empty());
+        assert!(profile.date_of_birth.is_none());
+        assert!(profile.emails.is_empty());
+        assert!(profile.phone_numbers.is_empty());
+        assert!(profile.current_address.is_none());
+        assert!(profile.previous_addresses.is_empty());
+        assert!(profile.relatives.is_empty());
+    }
+
+    #[test]
+    fn test_full_name_construction() {
+        let name = FullName {
+            first: "John".to_string(),
+            middle: Some("Danger".to_string()),
+            last: "Doe".to_string(),
+        };
+        assert_eq!(name.first, "John");
+        assert_eq!(name.middle.as_deref(), Some("Danger"));
+        assert_eq!(name.last, "Doe");
+    }
+
+    #[test]
+    fn test_address_construction() {
+        let addr = Address {
+            street: "123 Main St".to_string(),
+            city: "Springfield".to_string(),
+            state_or_region: "OR".to_string(),
+            postal_code: "97477".to_string(),
+            country: "US".to_string(),
+        };
+        assert_eq!(addr.street, "123 Main St");
+        assert_eq!(addr.city, "Springfield");
+        assert_eq!(addr.state_or_region, "OR");
+        assert_eq!(addr.postal_code, "97477");
+        assert_eq!(addr.country, "US");
+    }
+}
