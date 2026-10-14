@@ -10,3 +10,4 @@ name = "tgk"
 path = "src/main.rs"
 
 [dependencies]
+clap = { workspace = true }
