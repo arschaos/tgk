@@ -52,19 +52,36 @@ jobs:
   docker:
     needs: build
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: linux/amd64
+            tag: tgk-amd64:latest
+          - platform: linux/arm64
+            tag: tgk-arm64:latest
     steps:
       - uses: actions/checkout@v4
 
+      - uses: docker/setup-qemu-action@v3
+
       - uses: docker/setup-buildx-action@v3
 
-      - name: Build (multi-arch)
+      - name: Build (${{ matrix.platform }})
         uses: docker/build-push-action@v6
         with:
           context: .
-          platforms: linux/amd64,linux/arm64
-          outputs: type=image,name=tgk:latest,push=false
+          platforms: ${{ matrix.platform }}
+          load: true
+          tags: ${{ matrix.tag }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Run
-        run: docker run --rm tgk:latest && docker run --rm tgk:latest --version
+      - name: Run (${{ matrix.platform }})
+        run: |
+          docker run --rm --platform ${{ matrix.platform }} ${{ matrix.tag }} --version
+          out="$(docker run --rm --platform ${{ matrix.platform }} ${{ matrix.tag }} execute)"
+          [ "$out" = "Hello World" ]
+
+      - name: Run non-root (${{ matrix.platform }})
+        run: docker run --rm --platform ${{ matrix.platform }} --user tgk ${{ matrix.tag }} execute
