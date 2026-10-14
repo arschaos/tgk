@@ -1,0 +1,40 @@
+# Build artifacts
+# Prevents transferring gigabytes of host-compiled binaries/caches into the Docker daemon
+target/
+
+# Version control
+.git/
+.gitignore
+.gitattributes
+.github/
+.gitlab/
+
+# Docker files
+# Prevents changes to container config from busting source layer caches
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# Secrets and local environments
+.env
+.env.*
+*.pem
+*.key
+*.cert
+
+# IDE and editor settings
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+
+# Test coverage, profiling, and benchmark outputs
+coverage/
+*.profraw
+*.profdata
+target/criterion/
