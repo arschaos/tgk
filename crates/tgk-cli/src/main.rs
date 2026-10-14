@@ -13,7 +13,6 @@ enum Commands {
     Execute,
 }
 
-
 fn main() {
     let cli = Cli::parse();
 
