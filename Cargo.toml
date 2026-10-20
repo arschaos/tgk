@@ -11,3 +11,5 @@ repository = "https://github.com/arschaos/tgk"
 
 [workspace.dependencies]
 clap = { version = "4", features = ["derive"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
