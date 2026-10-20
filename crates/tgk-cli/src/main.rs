@@ -11,9 +11,10 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
-    /// Print Hello World.
-    Execute,
-    /// Create and display a user profile (in-memory, Step 1).
+    /// Run all startup steps (profile now; more steps land later).
+    Init(InitArgs),
+
+    /// Manage the user profile.
     Profile(ProfileCmd),
 }
 
@@ -52,6 +53,13 @@ struct CreateArgs {
     json: bool,
 }
 
+#[derive(Args)]
+struct InitArgs {
+    /// Identity inputs used by the profile step.
+    #[command(flatten)]
+    profile: CreateArgs,
+}
+
 impl CreateArgs {
     fn profile(&self) -> Result<Profile, String> {
         let mut accounts = Vec::with_capacity(self.accounts.len());
@@ -80,14 +88,17 @@ fn main() -> ExitCode {
     let cli = Cli::parse();
 
     match cli.command {
-        Commands::Execute => {
-            println!("Hello World");
-            ExitCode::SUCCESS
-        }
+        Commands::Init(init) => run_init(init),
         Commands::Profile(cmd) => match cmd.command {
             ProfileSub::Create(args) => create(args),
         },
     }
+}
+
+fn run_init(init: InitArgs) -> ExitCode {
+    let status = create(init.profile);
+    // additional startup steps are appended here as they land
+    status
 }
 
 fn create(args: CreateArgs) -> ExitCode {
@@ -146,14 +157,9 @@ mod tests {
     }
 
     #[test]
-    fn execute_is_parsed() {
-        let cli = Cli::try_parse_from(["tgk", "execute"]).unwrap();
-        assert!(matches!(cli.command, Commands::Execute));
-    }
-
-    #[test]
     fn unknown_command_is_rejected() {
         assert!(Cli::try_parse_from(["tgk", "nope"]).is_err());
+        assert!(Cli::try_parse_from(["tgk", "execute"]).is_err());
     }
 
     fn parsed_create_args(args: &[&str]) -> CreateArgs {
@@ -162,7 +168,15 @@ mod tests {
             Commands::Profile(cmd) => match cmd.command {
                 ProfileSub::Create(create_args) => create_args,
             },
-            _ => panic!("expected `profile create`"),
+            Commands::Init(_) => panic!("expected `profile create`"),
+        }
+    }
+
+    fn parsed_init_args(args: &[&str]) -> InitArgs {
+        let cli = Cli::try_parse_from(args).expect("command line should parse");
+        match cli.command {
+            Commands::Init(init) => init,
+            Commands::Profile(_) => panic!("expected `init`"),
         }
     }
 
@@ -214,6 +228,15 @@ mod tests {
             "nocolon",
         ]);
         assert!(args.profile().is_err());
+    }
+
+    #[test]
+    fn init_runs_profile_step() {
+        let init = parsed_init_args(&["tgk", "init", "--name", "X", "--email", "a@b.c"]);
+        assert_eq!(init.profile.name, "X");
+        assert_eq!(init.profile.emails, vec!["a@b.c".to_owned()]);
+        let profile = init.profile.profile().expect("profile should build");
+        assert_eq!(profile.display_name, "X");
     }
 
     #[test]

@@ -40,7 +40,7 @@ jobs:
       run: cargo build --workspace --release
 
     - name: Run
-      run: cargo run --release -- execute
+      run: cargo run --release -- init --name smoke
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
@@ -80,8 +80,8 @@ jobs:
       - name: Run (${{ matrix.platform }})
         run: |
           docker run --rm --platform ${{ matrix.platform }} ${{ matrix.tag }} --version
-          out="$(docker run --rm --platform ${{ matrix.platform }} ${{ matrix.tag }} execute)"
-          [ "$out" = "Hello World" ]
+          out="$(docker run --rm --platform ${{ matrix.platform }} ${{ matrix.tag }} init --name smoke --json)"
+          echo "$out" | grep -q '"display_name": "smoke"'
 
       - name: Run non-root (${{ matrix.platform }})
-        run: docker run --rm --platform ${{ matrix.platform }} --user tgk ${{ matrix.tag }} execute
+        run: docker run --rm --platform ${{ matrix.platform }} --user tgk ${{ matrix.tag }} init --name smoke

@@ -39,7 +39,7 @@ pub struct Account {
 
     /// Removal status, e.g. `"none"`, `"requested"`, `"confirmed"`.
     pub status: Option<String>,
-    
+
     /// RFC 3339 timestamp of the last run (string in Step 1).
     pub last_run: Option<String>,
 }
